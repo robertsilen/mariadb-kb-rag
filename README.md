@@ -31,7 +31,7 @@ docker run -p 127.0.0.1:3306:3306  --name mdb_116_vector -e MARIADB_ROOT_PASSWOR
 If needed, access MariaDB with:
 
 ```bash
-docker exec -it mdb_vector mariadb --user root -pPassword123!
+docker exec -it mdb_116_vector mariadb --user root -pPassword123!
 ```
 
 2. Add your OpenAI API key to your environment variables. Create a key at https://platform.openai.com/api-keys. 

@@ -11,7 +11,7 @@ def delete_database(cur):
    print("Delete database")
    cur.execute("""DROP DATABASE IF EXISTS kb_vector;""")
 
-def create_tables(cur): 
+def create_database_and_tables(cur): 
    print("Creating database and tables")
    cur.execute("""
       CREATE DATABASE IF NOT EXISTS kb_vector;
@@ -20,7 +20,7 @@ def create_tables(cur):
       CREATE TABLE IF NOT EXISTS kb_vector.kb_articles (
          article_id INT PRIMARY KEY AUTO_INCREMENT,
          title VARCHAR(255) NOT NULL,
-         slug VARCHAR(255) UNIQUE NOT NULL,
+         url VARCHAR(255) UNIQUE NOT NULL,
          content LONGTEXT NOT NULL
       );
       """)
@@ -39,23 +39,25 @@ def create_tables(cur):
 def read_kb_from_slugs():
    print("Reading KB content from scraped web")
    contents = []
-   contents.append({"slug" : "/en/vector-overview/"})
-   contents.append({"slug" : "/en/what-is-mariadb-galera-cluster/"})
+   contents.append({"url" : "https://mariadb.com/kb/en/vector-overview/"})
+   contents.append({"url" : "https://mariadb.com/kb/en/what-is-mariadb-galera-cluster/"})
 
    ## Read in more slugs from file 
    #filename = "kb_slugs.txt"
    #with open(filename, "r") as file:
    #   for line in file:
-   #      contents.append({"slug" : line.strip()})
+   #      contents.append({"url" : "https://mariadb.com/kb" + line.strip()})
+   #      if len(contents) >= 10:
+   #         break
    
-   ## Configure html2text
+   ## Configure html2text for markdown conversion
    h = html2text.HTML2Text()
    h.ignore_links = False
    h.ignore_images = False
    h.body_width = 0  # Don't wrap text at a specific width
    
    for content in contents:
-      url = "https://mariadb.com/kb" + content["slug"]
+      url = content["url"]
       print("Scraping: ", url)
       response = requests.get(url)
       if response.status_code == 404:
@@ -65,27 +67,27 @@ def read_kb_from_slugs():
       content["title"] = soup.find("h1").text.strip()
       content_html = str(soup.find("div", class_="answer formatted"))
       content["content"] = h.handle(content_html) # Convert HTML to markdown
-      print("Scraped content: ", url, content["title"])
+      print(f"Scraped content: {content["title"]}")
       #print(content["content"])
    return contents
 
-def insert_content_to_mdb(cur, contents):
+def insert_content_to_mdb(cur, conn, contents):
    print("Inserting KB content to MariaDB table kb_articles")
    for content in contents: 
-      cur.execute("""INSERT INTO kb_vector.kb_articles (title, slug, content)
+      cur.execute("""INSERT INTO kb_vector.kb_articles (title, url, content)
                   VALUES (%s, %s, %s)""",
-                  (content["title"], content["slug"], content["content"]))
+                  (content["title"], content["url"], content["content"]))
       conn.commit()
 
 def get_content_from_mdb(cur):
    print("Getting content from MariaDB kb_articles")
    items = []
-   cur.execute("SELECT article_id, title, slug, content FROM kb_vector.kb_articles")
-   for (article_id, title, slug, content) in cur:
+   cur.execute("SELECT article_id, title, url, content FROM kb_vector.kb_articles")
+   for (article_id, title, url, content) in cur:
       items.append({
              "id":article_id, 
              "title":title, 
-             "slug":slug, 
+             "url":url, 
              "content":content
              })
    print("Retrieved items: ", len(items))
@@ -150,38 +152,49 @@ def embed(text):
    embedding = response.data[0].embedding
    return embedding
 
-def insert_chunks_and_embedding(items):
+def insert_chunks_and_embedding(cur, conn, items):
      start_time = time.time()
      total_chunks = 0
      total_articles = len(items)
-     
+     total_embed_time = 0
+     total_vector_insert_time = 0
+
      for j, item in enumerate(items):
          article_start = time.time()
+         total_lines = len(item["content"].split('\n'))
+         article_length = len(item['content'])
          content = item["content"]
          chunks = chunkify(content)
          total_chunks += len(chunks)
-         
+
          for i, chunk in enumerate(chunks):
-            chunk_start = time.time()
-            total_lines = len(content.split('\n'))
-            article_length = len(item['content'])
-            print(f"Embedding chunk {i} from page {j} '{item["title"]}', lines {chunk['start_line']}-{chunk['end_line']} of total lines {total_lines}, chunk length {len(chunk['content'])} of article length {article_length}")
             #print(chunk['content'])
+            embed_start = time.time()
             embedding = embed(chunk['content'])
+            embed_time = time.time() - embed_start
+
+            vector_insert_start = time.time()
             cur.execute(
                 """INSERT INTO kb_vector.kb_chunks 
                    (article_id, chunk_order, chunk_content, embedding) 
                 VALUES (%d, %d, %s, Vec_FromText(%s))""",
                 (item["id"], i, chunk['content'], str(embedding))
             )
-            chunk_time = time.time() - chunk_start
-            #print(f"Chunk processing time: {chunk_time:.2f} seconds")
-            
+            vector_insert_time = time.time() - vector_insert_start
+            total_vector_insert_time += vector_insert_time
+
+            print(f"Embedded chunk {i}, page {j} '{item["title"]}', lines {chunk['start_line']}-{chunk['end_line']} of {total_lines} total, length {len(chunk['content'])} of article {article_length}. Embed {embed_time:.2f} seconds, MariaDB insert {vector_insert_time:.2f} seconds")
+
+         #print("Doing commit")
+         vector_insert_start = time.time()
+         conn.commit() 
+         vector_insert_time = time.time() - vector_insert_start
+         total_vector_insert_time += vector_insert_time 
+
          article_time = time.time() - article_start
          print(f"Inserting {len(chunks)} chunks from page {j} '{item["title"]}' to MariaDB kb_chunks")
-         print(f"Article processing time: {article_time:.2f} seconds")
-         conn.commit()
-     
+         print(f"Article processing time: {article_time:.2f} seconds. So far total embedding time: {total_embed_time:.2f} seconds, vector insert time: {total_vector_insert_time:.2f} seconds")
+   
      total_time = time.time() - start_time
      avg_time = total_time / total_chunks if total_chunks > 0 else 0
      avg_article_time = total_time / total_articles if total_articles > 0 else 0
@@ -191,6 +204,10 @@ def insert_chunks_and_embedding(items):
      print(f"Average time per article: {avg_article_time:.2f} seconds")
      print(f"Total chunks processed: {total_chunks}")
      print(f"Average time per chunk: {avg_time:.2f} seconds")
+     print(f"Total embedding time: {total_embed_time:.2f} seconds")
+     print(f"Average embedding time per chunk: {total_embed_time / total_chunks:.2f} seconds")
+     print(f"Total vector insert time: {total_vector_insert_time:.2f} seconds")
+     print(f"Average vector insert time per chunk: {total_vector_insert_time / total_chunks:.2f} seconds")
 
 def count_chunks_in_mariadb(cur):
    print("\nTotal chunks in MariaDB kb_chunks:")
@@ -202,41 +219,42 @@ def count_chunks_in_mariadb(cur):
       print(f"Total articles: {unique_articles}")
       print(f"Total chunks: {total_chunks}")
 
-def search_for_closest(text, n, previous=1, next=1):
+def search_for_closest(cur, text, n, previous=1, next=1):
    print(f"\nSearching for {n} closest chunks to: '{text}'")
    embedding = embed(text)
    closest_chunks = []
    
    query_start = time.time()
    cur.execute("""
-      WITH closest_chunks AS (
-         SELECT c.chunk_order, c.chunk_content, 
-            a.article_id, a.title, a.slug,
-            VEC_Distance(c.embedding, Vec_FromText(%s)) as distance
-         FROM kb_vector.kb_chunks c
-         JOIN kb_vector.kb_articles a ON c.article_id = a.article_id
-         ORDER BY distance
-         LIMIT %s
-      )
-      SELECT c2.chunk_order, c2.chunk_content, 
-         a.article_id, a.title, a.slug, 
-         CASE 
-            WHEN c2.chunk_order = cc.chunk_order THEN 'main'
-            WHEN c2.chunk_order < cc.chunk_order THEN 'previous'
-            ELSE 'next'
-         END as chunk_type,
-         cc.distance
-      FROM closest_chunks cc
-      JOIN kb_vector.kb_chunks c2 ON c2.article_id = cc.article_id
-      JOIN kb_vector.kb_articles a ON c2.article_id = a.article_id
-      WHERE c2.chunk_order BETWEEN (cc.chunk_order - %s) AND (cc.chunk_order + %s)
-      ORDER BY cc.distance, c2.article_id, c2.chunk_order
+WITH closest_chunks AS (
+   SELECT c.chunk_order, c.chunk_content, 
+      a.article_id, a.title, a.url,
+      VEC_Distance(c.embedding, Vec_FromText(%s)) AS distance
+   FROM kb_vector.kb_chunks c
+   JOIN kb_vector.kb_articles a ON c.article_id = a.article_id
+   ORDER BY distance
+   LIMIT %s
+)
+SELECT c2.chunk_order, c2.chunk_content, 
+   a.article_id, a.title, a.url, 
+   CASE 
+      WHEN c2.chunk_order = cc.chunk_order THEN 'main'
+      WHEN c2.chunk_order < cc.chunk_order THEN 'previous'
+      ELSE 'next'
+   END AS chunk_type,
+   cc.distance
+FROM closest_chunks cc
+JOIN kb_vector.kb_chunks c2 ON c2.article_id = cc.article_id
+JOIN kb_vector.kb_articles a ON c2.article_id = a.article_id
+WHERE c2.chunk_order BETWEEN (cc.chunk_order - %s) AND (cc.chunk_order + %s)
+ORDER BY cc.distance, c2.article_id, c2.chunk_order;
+
     """, (str(embedding), n, previous, next))
     
-   for (chunk_order, chunk_content, article_id, title, slug, chunk_type, distance) in cur:
+   for (chunk_order, chunk_content, article_id, title, url, chunk_type, distance) in cur:
       closest_chunks.append({
          "article_id": article_id,
-         "slug": slug,
+         "url": url,
          "title": title,
          "chunk_order": chunk_order,
          "chunk_type": chunk_type,
@@ -246,89 +264,115 @@ def search_for_closest(text, n, previous=1, next=1):
 
    result = f"\nClosest {n} chunks:"
    for chunk in closest_chunks:
-      result += f"\n{chunk["distance"]}, {chunk["slug"]}, chunk {chunk["chunk_order"]}, chunk {chunk["chunk_type"]}: {chunk["chunk_content"].replace('\n', ' ')}"
-   print(f"{result}")
+      result += f"\n{chunk["distance"]}, {chunk["url"]}, chunk {chunk["chunk_order"]}, {chunk["chunk_type"]}: {chunk["chunk_content"].replace('\n', ' ')}"
+   #print(f"{result}")
    query_time = time.time() - query_start
-   print(f"Vector search query time: {query_time:.2f} seconds")
+   #print(f"Vector search query time: {query_time:.2f} seconds")
 
-   return closest_chunks
+   return closest_chunks, query_time
 
 def prompt_llm(question, closest_chunks):
-   print(f"\n\n\nPrompting LLM with {len(closest_chunks)} chunks and question:\n{question}")
+   print(f"\nPrompting LLM with {len(closest_chunks)} chunks and question: '{question}'")
    prompt = f"""
-   You are a helpful assistant that answers questions using exclusively the MariaDB Knowledgebase.
+   You are a helpful assistant that answers questions using exclusively the MariaDB Knowledge Base.
    The user asked: {question}
-   Use only the following chunks from the MariaDB Knowledgebase to answer the question:
+   Use only the following chunks from the MariaDB Knowledge Base to answer the question:
    """
    for chunk in closest_chunks:
       prompt += f"""
       {chunk["chunk_content"]}
       """
-   
+   #print(prompt)
+
    response = client.chat.completions.create(
       model="gpt-4o-mini",
       messages=[{"role": "system", "content": prompt}]
    )
-   answer = "\n\nReponse from LLM:\n"
+   answer = "\nResponse from LLM:\n"
    answer += response.choices[0].message.content
    
    sources = "\n\nSources shared to LLM:\n"
    for chunk in closest_chunks:
-      sources += f"{chunk["distance"]}, [{chunk["title"]}](https://mariadb.com/kb{chunk["slug"]}, chunk {chunk["chunk_order"]}, {chunk["chunk_content"].replace('\n', ' ')[:20]} ... {chunk["chunk_content"].replace('\n', ' ')[-20:]}\n"
+      sources += f"{chunk["distance"]}, [{chunk["title"]}]({chunk["url"]}, chunk {chunk["chunk_order"]}, {chunk["chunk_content"].replace('\n', ' ')[:20]} ... {chunk["chunk_content"].replace('\n', ' ')[-20:]}\n"
    #print(f"{sources}")
 
    return f"{answer}{sources}"
 
+def prepare_database():
+    """Set up the database and load initial content"""
+    try:
+        conn = get_database_connection()
+        cur = conn.cursor()
+        
+        # Prepare tables
+        delete_database(cur)
+        create_database_and_tables(cur)
+        
+        # Insert KB articles
+        contents = read_kb_from_slugs()
+        insert_content_to_mdb(cur, conn, contents)
+        
+        # Create chunks and embeddings
+        items = get_content_from_mdb(cur)
+        insert_chunks_and_embedding(cur, conn, items)
+        
+        count_chunks_in_mariadb(cur)
+        conn.close()
+        
+    except mariadb.Error as e:
+        print(f"Error in database preparation: {e}")
+        sys.exit(1)
+
+
+def get_database_connection():
+    """Create and return a database connection"""
+    return mariadb.connect(
+        host="127.0.0.1",
+        port=3306,
+        user="root",
+        password="Password123!"
+    )
+
+def answer_questions(questions):
+    """Process a list of questions using the prepared database"""
+    try:
+        conn = get_database_connection()
+        cur = conn.cursor()
+        
+        for question in questions:
+            time_answer_q_start = time.time()
+            time_search_start = time.time()
+            closest_chunks, vector_search_time = search_for_closest(cur, question, n=5, next=0, previous=0)
+            time_search_end = time.time()
+            answer = prompt_llm(question, closest_chunks)
+            time_answer_q_end = time.time()
+            print(answer)
+            print(f"Total time to answer question: {time_answer_q_end - time_answer_q_start:.2f} seconds")
+            print(f"Time to embed question and vector search for closest chunks: {time_search_end - time_search_start:.2f} seconds")
+            print(f"Vector search time: {vector_search_time:.2f} seconds")
+            print(f"Time to prompt LLM: {time_answer_q_end - time_search_end:.2f} seconds")
+        conn.close()
+        
+    except mariadb.Error as e:
+        print(f"Error in question answering: {e}")
+        sys.exit(1)
+
+
 # To run MariaDB 11.6 Vector Preview Release with Docker: 
 # docker run -p 127.0.0.1:3306:3306  --name mdb_116_vector -e MARIADB_ROOT_PASSWORD=Password123! -d quay.io/mariadb-foundation/mariadb-devel:11.6-vector-preview
-# Access MariaDB with:
-# docker exec -it mdb_116_vector mariadb --user root -pPassword123!
 
 # For embedding, OpenAI API key is needed. Create at https://platform.openai.com/api-keys and add to system variables with export OPENAI_API_KEY='your-key-here'.
+
 client = OpenAI(
    api_key=os.getenv('OPENAI_API_KEY') 
 )
 
-try:
-   conn = mariadb.connect(
-      host="127.0.0.1",
-      port=3306,
-      user="root",
-      password="Password123!",
-      database="kb_vector")
-   cur = conn.cursor()
+prepare_database()
 
-   ## 1. PREPARE TABLES
-   delete_database(cur)
-   create_tables(cur)
-   
-   ## Insert KB articles into database
-   contents = read_kb_from_slugs()
-   insert_content_to_mdb(cur, contents)
-
-   ## Create chunks and embeddings
-   items = get_content_from_mdb(cur)
-   insert_chunks_and_embedding(items)
-
-   ## 2. EMBED QUESTION AND PROMPT LLM WITH QUESTION AND CLOSEST CHUNKS   
-
-   ## Print amount of articles and chunks in database
-   count_chunks_in_mariadb(cur)
-
-   questions = [
-      "replication", 
-      "create vector index", 
-      "where can MariaDB Galera Cluster be downloaded?", 
-      "What data types should be used for vector data?"
-      ]
-   for question in questions:
-      closest_chunks = search_for_closest(question, n=5, next=0, previous=0)
-      answer = prompt_llm(question, closest_chunks)
-      print(answer)
-
-   # Close Connection
-   conn.close()
-
-except mariadb.Error as e:
-      print(f"Error connecting to the database: {e}")
-      sys.exit(1)
+questions = [
+   "replication", 
+   "create vector index", 
+   "where can MariaDB Galera Cluster be downloaded?", 
+   "What data types should be used for vector data?"
+   ]
+answer_questions(questions)
