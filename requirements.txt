@@ -1,0 +1,5 @@
+mariadb==1.1.9
+openai==1.12.0
+requests==2.31.0
+beautifulsoup4==4.12.3
+html2text==2024.2.26 

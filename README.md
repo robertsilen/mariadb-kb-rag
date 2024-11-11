@@ -40,7 +40,18 @@ docker exec -it mdb_116_vector mariadb --user root -pPassword123!
 export OPENAI_API_KEY='your-key-here'
 ```
 
-3. Install the required Python packages with pip
+3. Set up a virtual environment
+
+```bash
+python -m venv venv
+source venv/bin/activate  # On Unix/macOS
+```
+
+4. Install the required Python packages with pip
+
+```bash
+pip install -r requirements.txt
+```
 
 ## Usage
 
