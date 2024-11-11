@@ -1,0 +1,188 @@
+(venv) (base) user@machine mariadb-kb-rag % python mariadb_kb_rag.py
+Delete database
+Creating database and tables
+Reading KB content from scraped web
+Scraping:  https://mariadb.com/kb/en/vector-overview/
+Scraped content: Vector Overview
+Scraping:  https://mariadb.com/kb/en/what-is-mariadb-galera-cluster/
+Scraped content: What is MariaDB Galera Cluster?
+Inserting KB content to MariaDB table kb_articles
+Getting content from MariaDB kb_articles
+Retrieved items:  2
+Embedded chunk 0, page 0 'Vector Overview', lines 0-0 of 108 total, length 72 of article 4385. Embed 0.85 seconds, MariaDB insert 0.01 seconds
+Embedded chunk 1, page 0 'Vector Overview', lines 1-2 of 108 total, length 81 of article 4385. Embed 0.54 seconds, MariaDB insert 0.01 seconds
+Embedded chunk 2, page 0 'Vector Overview', lines 3-4 of 108 total, length 186 of article 4385. Embed 0.59 seconds, MariaDB insert 0.01 seconds
+Embedded chunk 3, page 0 'Vector Overview', lines 5-6 of 108 total, length 192 of article 4385. Embed 0.40 seconds, MariaDB insert 0.01 seconds
+Embedded chunk 4, page 0 'Vector Overview', lines 7-8 of 108 total, length 11 of article 4385. Embed 0.53 seconds, MariaDB insert 0.01 seconds
+Embedded chunk 5, page 0 'Vector Overview', lines 9-10 of 108 total, length 289 of article 4385. Embed 0.31 seconds, MariaDB insert 0.01 seconds
+Embedded chunk 6, page 0 'Vector Overview', lines 11-17 of 108 total, length 109 of article 4385. Embed 0.38 seconds, MariaDB insert 0.01 seconds
+Embedded chunk 7, page 0 'Vector Overview', lines 18-20 of 108 total, length 12 of article 4385. Embed 0.62 seconds, MariaDB insert 0.01 seconds
+Embedded chunk 8, page 0 'Vector Overview', lines 21-22 of 108 total, length 132 of article 4385. Embed 0.56 seconds, MariaDB insert 0.01 seconds
+Embedded chunk 9, page 0 'Vector Overview', lines 23-35 of 108 total, length 604 of article 4385. Embed 0.30 seconds, MariaDB insert 0.01 seconds
+Embedded chunk 10, page 0 'Vector Overview', lines 36-38 of 108 total, length 52 of article 4385. Embed 0.36 seconds, MariaDB insert 0.01 seconds
+Embedded chunk 11, page 0 'Vector Overview', lines 39-51 of 108 total, length 762 of article 4385. Embed 0.54 seconds, MariaDB insert 0.01 seconds
+Embedded chunk 12, page 0 'Vector Overview', lines 52-54 of 108 total, length 11 of article 4385. Embed 0.52 seconds, MariaDB insert 0.01 seconds
+Embedded chunk 13, page 0 'Vector Overview', lines 55-56 of 108 total, length 132 of article 4385. Embed 0.37 seconds, MariaDB insert 0.01 seconds
+Embedded chunk 14, page 0 'Vector Overview', lines 57-74 of 108 total, length 258 of article 4385. Embed 0.54 seconds, MariaDB insert 0.01 seconds
+Embedded chunk 15, page 0 'Vector Overview', lines 75-77 of 108 total, length 181 of article 4385. Embed 0.60 seconds, MariaDB insert 0.01 seconds
+Embedded chunk 16, page 0 'Vector Overview', lines 78-87 of 108 total, length 168 of article 4385. Embed 0.26 seconds, MariaDB insert 0.01 seconds
+Embedded chunk 17, page 0 'Vector Overview', lines 88-90 of 108 total, length 19 of article 4385. Embed 0.63 seconds, MariaDB insert 0.01 seconds
+Embedded chunk 18, page 0 'Vector Overview', lines 91-92 of 108 total, length 56 of article 4385. Embed 0.63 seconds, MariaDB insert 0.01 seconds
+Embedded chunk 19, page 0 'Vector Overview', lines 93-97 of 108 total, length 657 of article 4385. Embed 0.24 seconds, MariaDB insert 0.01 seconds
+Embedded chunk 20, page 0 'Vector Overview', lines 98-101 of 108 total, length 11 of article 4385. Embed 0.55 seconds, MariaDB insert 0.01 seconds
+Embedded chunk 21, page 0 'Vector Overview', lines 102-104 of 108 total, length 248 of article 4385. Embed 0.54 seconds, MariaDB insert 0.02 seconds
+Inserting 22 chunks from page 0 'Vector Overview' to MariaDB kb_chunks
+Article processing time: 11.08 seconds. So far total embedding time: 0.00 seconds, vector insert time: 0.23 seconds
+Embedded chunk 0, page 1 'What is MariaDB Galera Cluster?', lines 0-2 of 144 total, length 283 of article 14331. Embed 0.43 seconds, MariaDB insert 0.01 seconds
+Embedded chunk 1, page 1 'What is MariaDB Galera Cluster?', lines 3-4 of 144 total, length 12 of article 14331. Embed 0.40 seconds, MariaDB insert 0.01 seconds
+Embedded chunk 2, page 1 'What is MariaDB Galera Cluster?', lines 5-12 of 144 total, length 121 of article 14331. Embed 0.49 seconds, MariaDB insert 0.01 seconds
+Embedded chunk 3, page 1 'What is MariaDB Galera Cluster?', lines 13-16 of 144 total, length 8 of article 14331. Embed 0.62 seconds, MariaDB insert 0.01 seconds
+Embedded chunk 4, page 1 'What is MariaDB Galera Cluster?', lines 17-18 of 144 total, length 72 of article 14331. Embed 0.60 seconds, MariaDB insert 0.01 seconds
+Embedded chunk 5, page 1 'What is MariaDB Galera Cluster?', lines 19-20 of 144 total, length 614 of article 14331. Embed 0.25 seconds, MariaDB insert 0.01 seconds
+Embedded chunk 6, page 1 'What is MariaDB Galera Cluster?', lines 21-22 of 144 total, length 11 of article 14331. Embed 0.35 seconds, MariaDB insert 0.01 seconds
+Embedded chunk 7, page 1 'What is MariaDB Galera Cluster?', lines 23-30 of 144 total, length 354 of article 14331. Embed 0.61 seconds, MariaDB insert 0.01 seconds
+Embedded chunk 8, page 1 'What is MariaDB Galera Cluster?', lines 31-34 of 144 total, length 11 of article 14331. Embed 0.40 seconds, MariaDB insert 0.01 seconds
+Embedded chunk 9, page 1 'What is MariaDB Galera Cluster?', lines 35-36 of 144 total, length 84 of article 14331. Embed 0.40 seconds, MariaDB insert 0.01 seconds
+Embedded chunk 10, page 1 'What is MariaDB Galera Cluster?', lines 37-41 of 144 total, length 94 of article 14331. Embed 0.40 seconds, MariaDB insert 0.01 seconds
+Embedded chunk 11, page 1 'What is MariaDB Galera Cluster?', lines 42-45 of 144 total, length 182 of article 14331. Embed 0.91 seconds, MariaDB insert 0.01 seconds
+Embedded chunk 12, page 1 'What is MariaDB Galera Cluster?', lines 46-47 of 144 total, length 242 of article 14331. Embed 0.61 seconds, MariaDB insert 0.01 seconds
+Embedded chunk 13, page 1 'What is MariaDB Galera Cluster?', lines 48-49 of 144 total, length 18 of article 14331. Embed 0.52 seconds, MariaDB insert 0.01 seconds
+Embedded chunk 14, page 1 'What is MariaDB Galera Cluster?', lines 50-51 of 144 total, length 37 of article 14331. Embed 0.38 seconds, MariaDB insert 0.01 seconds
+Embedded chunk 15, page 1 'What is MariaDB Galera Cluster?', lines 52-54 of 144 total, length 97 of article 14331. Embed 0.30 seconds, MariaDB insert 0.01 seconds
+Embedded chunk 16, page 1 'What is MariaDB Galera Cluster?', lines 55-58 of 144 total, length 288 of article 14331. Embed 0.50 seconds, MariaDB insert 0.01 seconds
+Embedded chunk 17, page 1 'What is MariaDB Galera Cluster?', lines 59-61 of 144 total, length 513 of article 14331. Embed 0.40 seconds, MariaDB insert 0.01 seconds
+Embedded chunk 18, page 1 'What is MariaDB Galera Cluster?', lines 62-65 of 144 total, length 185 of article 14331. Embed 0.49 seconds, MariaDB insert 0.01 seconds
+Embedded chunk 19, page 1 'What is MariaDB Galera Cluster?', lines 66-67 of 144 total, length 21 of article 14331. Embed 0.26 seconds, MariaDB insert 0.01 seconds
+Embedded chunk 20, page 1 'What is MariaDB Galera Cluster?', lines 68-69 of 144 total, length 405 of article 14331. Embed 0.30 seconds, MariaDB insert 0.01 seconds
+Embedded chunk 21, page 1 'What is MariaDB Galera Cluster?', lines 70-90 of 144 total, length 3777 of article 14331. Embed 0.34 seconds, MariaDB insert 0.01 seconds
+Embedded chunk 22, page 1 'What is MariaDB Galera Cluster?', lines 91-92 of 144 total, length 21 of article 14331. Embed 0.52 seconds, MariaDB insert 0.01 seconds
+Embedded chunk 23, page 1 'What is MariaDB Galera Cluster?', lines 93-94 of 144 total, length 403 of article 14331. Embed 0.33 seconds, MariaDB insert 0.01 seconds
+Embedded chunk 24, page 1 'What is MariaDB Galera Cluster?', lines 95-131 of 144 total, length 5785 of article 14331. Embed 0.47 seconds, MariaDB insert 0.01 seconds
+Embedded chunk 25, page 1 'What is MariaDB Galera Cluster?', lines 132-133 of 144 total, length 11 of article 14331. Embed 0.91 seconds, MariaDB insert 0.01 seconds
+Embedded chunk 26, page 1 'What is MariaDB Galera Cluster?', lines 134-140 of 144 total, length 593 of article 14331. Embed 0.32 seconds, MariaDB insert 0.01 seconds
+Inserting 27 chunks from page 1 'What is MariaDB Galera Cluster?' to MariaDB kb_chunks
+Article processing time: 12.75 seconds. So far total embedding time: 0.00 seconds, vector insert time: 0.47 seconds
+
+Embedding Statistics:
+Total processing time: 23.84 seconds
+Total articles processed: 2
+Average time per article: 11.92 seconds
+Total chunks processed: 49
+Average time per chunk: 0.49 seconds
+Total embedding time: 0.00 seconds
+Average embedding time per chunk: 0.00 seconds
+Total vector insert time: 0.47 seconds
+Average vector insert time per chunk: 0.01 seconds
+
+Total chunks in MariaDB kb_chunks:
+Total articles: 2
+Total chunks: 49
+
+Searching for 5 closest chunks to: 'replication'
+
+Prompting LLM with 5 chunks and question: 'replication'
+
+Response from LLM:
+Replication in MariaDB can be achieved using Galera replication, which provides a virtually synchronous replication environment. Here are some key features of Galera replication:
+
+- **Active-active multi-primary topology**: You can read and write to any cluster node without having to designate a master.
+- **Automatic membership control**: Failed nodes are automatically dropped from the cluster, ensuring that the cluster remains operational with minimal manual intervention.
+- **Automatic node joining**: New nodes can join the cluster seamlessly without complex configurations.
+- **True parallel replication on row level**: This allows for more efficient processing of transactions.
+- **No replica lag**: Transactions are applied nearly instantaneously across all nodes, preventing delays commonly associated with traditional asynchronous replication.
+- **No lost transactions**: Transactions are guaranteed to be replicated without loss.
+- **Read scalability**: Query operations can be distributed across multiple nodes, improving overall performance.
+- **Smaller client latencies**: Direct client connections contribute to reduced response times.
+
+For more detailed information, you can refer to the [About Galera Replication](https://kb.en/about-galera-replication/) article.
+
+Sources shared to LLM:
+1.1777061747488562, [What is MariaDB Galera Cluster?](https://mariadb.com/kb/en/what-is-mariadb-galera-cluster/, chunk 7, * [Virtually synchro ...  MariaDB look & feel
+1.215136270450555, [What is MariaDB Galera Cluster?](https://mariadb.com/kb/en/what-is-mariadb-galera-cluster/, chunk 10, * No replica lag     ... ler client latencies
+1.2295352658349963, [Vector Overview](https://mariadb.com/kb/en/vector-overview/, chunk 4, ## Creating ... ## Creating
+1.2442497441798877, [Vector Overview](https://mariadb.com/kb/en/vector-overview/, chunk 7, ## Inserting ... ## Inserting
+1.2647863623799824, [What is MariaDB Galera Cluster?](https://mariadb.com/kb/en/what-is-mariadb-galera-cluster/, chunk 26, * [Codership on Goog ... -known-limitations/)
+
+Total time to answer question: 7.04 seconds
+Time to embed question and vector search for closest chunks: 0.43 seconds
+Vector search time: 0.06 seconds
+Time to prompt LLM: 6.61 seconds
+
+Searching for 5 closest chunks to: 'create vector index'
+
+Prompting LLM with 5 chunks and question: 'create vector index'
+
+Response from LLM:
+To create a vector index in MariaDB, you can define it within the `CREATE TABLE` statement using the `VECTOR INDEX` syntax. Here’s an example:
+
+```sql
+CREATE TABLE v (
+   id INT PRIMARY KEY,
+   v VECTOR(5) NOT NULL,
+   VECTOR INDEX (v)
+);
+```
+
+This creates a table named `v` with a column `v` defined as a vector of size 5 and creates a vector index on that column. Note that the `CREATE VECTOR INDEX` statement is not fully implemented yet, so defining the index this way within the `CREATE TABLE` statement should be used for now.
+
+Sources shared to LLM:
+0.8104270457517991, [Vector Overview](https://mariadb.com/kb/en/vector-overview/, chunk 5, Vectors are defined  ... ATE TABLE statement:
+0.8296728989605016, [Vector Overview](https://mariadb.com/kb/en/vector-overview/, chunk 6, CREATE TABLE v (     ... TOR INDEX (v)     );
+0.9906866657153539, [Vector Overview](https://mariadb.com/kb/en/vector-overview/, chunk 18, There are a number o ... es used for vectors:
+1.0282553736928814, [Vector Overview](https://mariadb.com/kb/en/vector-overview/, chunk 2, MariaDB Vector is a  ... ched for in MariaDB.
+1.035224856641427, [Vector Overview](https://mariadb.com/kb/en/vector-overview/, chunk 1, Vectors were introdu ... -7-1-release-notes/)
+
+Total time to answer question: 2.66 seconds
+Time to embed question and vector search for closest chunks: 0.46 seconds
+Vector search time: 0.06 seconds
+Time to prompt LLM: 2.20 seconds
+
+Searching for 5 closest chunks to: 'where can MariaDB Galera Cluster be downloaded?'
+
+Prompting LLM with 5 chunks and question: 'where can MariaDB Galera Cluster be downloaded?'
+
+Response from LLM:
+MariaDB Galera Cluster can be obtained by installing the standard MariaDB Server packages along with the [Galera wsrep provider library](https://github.com/codership/galera/) package. If you prefer using package managers, the package is called `galera` for installation via [yum](https://kb.en/yum/), [apt](https://kb.en/installing-mariadb-deb-files/#installing-mariadb-with-apt), or [zypper](https://kb.en/installing-mariadb-with-zypper/). For detailed instructions on getting started with MariaDB Galera Cluster, you can refer to the [Getting Started with MariaDB Galera Cluster](https://kb.en/getting-started-with-mariadb-galera-cluster/) page.
+
+Sources shared to LLM:
+0.7476144418524276, [What is MariaDB Galera Cluster?](https://mariadb.com/kb/en/what-is-mariadb-galera-cluster/, chunk 16, The functionality of ... iaDB Server version:
+0.7605687005085172, [What is MariaDB Galera Cluster?](https://mariadb.com/kb/en/what-is-mariadb-galera-cluster/, chunk 11, The [Getting Started ... iaDB Galera Cluster.
+0.7821846531880711, [What is MariaDB Galera Cluster?](https://mariadb.com/kb/en/what-is-mariadb-galera-cluster/, chunk 14, MariaDB Galera Clust ... uster is powered by:
+0.789516676817636, [What is MariaDB Galera Cluster?](https://mariadb.com/kb/en/what-is-mariadb-galera-cluster/, chunk 15, * MariaDB Server.    ... /codership/galera/).
+0.8150345743863183, [What is MariaDB Galera Cluster?](https://mariadb.com/kb/en/what-is-mariadb-galera-cluster/, chunk 23, The following table  ...  is called `galera`.
+
+Total time to answer question: 3.76 seconds
+Time to embed question and vector search for closest chunks: 0.48 seconds
+Vector search time: 0.06 seconds
+Time to prompt LLM: 3.28 seconds
+
+Searching for 5 closest chunks to: 'What data types should be used for vector data?'
+
+Prompting LLM with 5 chunks and question: 'What data types should be used for vector data?'
+
+Response from LLM:
+For vector data in MariaDB, the recommended data type is `VECTOR`. This data type is designed to store vectors generated by AI models. In particular, vector columns store 32-bit IEEE 754 floating point numbers.
+
+Here is an example of how to define a vector column in a `CREATE TABLE` statement:
+
+```sql
+CREATE TABLE v (
+   id INT PRIMARY KEY,
+   v VECTOR(5) NOT NULL,
+   VECTOR INDEX (v)
+);
+```
+
+In this example, `v` is a vector column capable of holding a vector of specified dimensions (in this case, 5).
+
+Sources shared to LLM:
+0.9252231181948074, [Vector Overview](https://mariadb.com/kb/en/vector-overview/, chunk 18, There are a number o ... es used for vectors:
+0.9837148971562636, [Vector Overview](https://mariadb.com/kb/en/vector-overview/, chunk 5, Vectors are defined  ... ATE TABLE statement:
+1.001428107234856, [Vector Overview](https://mariadb.com/kb/en/vector-overview/, chunk 2, MariaDB Vector is a  ... ched for in MariaDB.
+1.0179946372073105, [Vector Overview](https://mariadb.com/kb/en/vector-overview/, chunk 8, Vector columns store ... ating-point_format).
+1.0454549164134268, [Vector Overview](https://mariadb.com/kb/en/vector-overview/, chunk 6, CREATE TABLE v (     ... TOR INDEX (v)     );
+
+Total time to answer question: 3.20 seconds
+Time to embed question and vector search for closest chunks: 0.48 seconds
+Vector search time: 0.05 seconds
+Time to prompt LLM: 2.72 seconds
