@@ -18,20 +18,20 @@ A Python script that implements Retrieval-Augmented Generation (RAG) on the Mari
 - Docker
 - Python 3.x (developed with 3.13)
 - OpenAI API key
-- MariaDB 11.6 Vector Preview Release
+- MariaDB 11.7.1
 
 ## Setup
 
-1. Start MariaDB 11.6 Vector Preview with Docker: 
+1. Start MariaDB 11.7.1 with Docker: 
 
 ```bash
-docker run -p 127.0.0.1:3306:3306  --name mdb_116_vector -e MARIADB_ROOT_PASSWORD=Password123! -d quay.io/mariadb-foundation/mariadb-devel:11.6-vector-preview
+docker run -p 127.0.0.1:3306:3306  --name mdb_1171 -e MARIADB_ROOT_PASSWORD=Password123! -d quay.io/mariadb-foundation/mariadb-devel:11.7
 ```
 
 If needed, access MariaDB with:
 
 ```bash
-docker exec -it mdb_116_vector mariadb --user root -pPassword123!
+docker exec -it mdb_1171 mariadb --user root -pPassword123!
 ```
 
 If needed, install Docker with:
@@ -84,5 +84,4 @@ Recently done:
 
 - Cursor https://www.cursor.com/
 - MariaDB Vector https://mariadb.com/kb/en/vector-overview/
-- MariaDB Vector example https://mariadb.com/resources/blog/mariadb-vector-preview-is-out/
 - Installing and Using MariaDB via Docker https://mariadb.com/kb/en/installing-and-using-mariadb-via-docker/
