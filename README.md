@@ -1,6 +1,8 @@
-# MariaDB Knowledge Base RAG with Vector Search
+# Demo: RAG with MariaDB Vector (dev version)
 
 A Python script that implements Retrieval-Augmented Generation (RAG) on the MariaDB Knowledge Base using MariaDB's vector database capabilities, OpenAI's embedding model, and OpenAI's LLM.
+
+This is my dev version with scraping, time recording, prints vector search results, etc. The simplified version is available at https://github.com/MariaDB/demos
 
 ## Features
 
@@ -71,17 +73,18 @@ python mariadb_kb_rag.py
 
 - Separate preparation and question asking for easier running
 - Test with larger amount of KB data
-- Improve efficiency: add caching for KB scraping, ignore scraping and inserting content already in database, etc
 - Try with other embedding and LLM models
 - Graphical GUI somehow
-
-Recently done:
-
-- Add timer for embedding and vector search
-- Improve chunkification with a max char limit (prioritize paragraph, then new line, then forced cut)
+- Separate preparation and running questions to own python files
+- Test other embedding and LLM models
+- Add a graphical GUI with flask, vue, streamlit, gradio, etc.
+- Improve chunking solution 
+- Try out more advanced chunking solutions, like https://github.com/bhavnicksm/chonkie/
 
 ## Resources used to put this together
 
-- Cursor https://www.cursor.com/
+- Cursor https://www.cursor.com/ with Claude Sonnet 3.5
 - MariaDB Vector https://mariadb.com/kb/en/vector-overview/
 - Installing and Using MariaDB via Docker https://mariadb.com/kb/en/installing-and-using-mariadb-via-docker/
+- OpenAI Embeddings https://platform.openai.com/docs/guides/embeddings
+- OpenAI Chat Completions https://platform.openai.com/docs/guides/text-generation
